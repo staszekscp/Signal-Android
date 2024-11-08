@@ -17,6 +17,7 @@ plugins {
   id("com.squareup.wire")
   id("translations")
   id("licenses")
+  id("com.facebook.react")
 }
 
 apply(from = "static-ips.gradle.kts")
@@ -25,6 +26,10 @@ val canonicalVersionCode = 1482
 val canonicalVersionName = "7.24.0"
 val currentHotfixVersion = 0
 val maxHotfixVersions = 100
+
+react {
+  autolinkLibrariesWithApp()
+}
 
 val keystores: Map<String, Properties?> = mapOf("debug" to loadKeystoreProperties("keystore.debug.properties"))
 
@@ -469,6 +474,10 @@ dependencies {
   lintChecks(project(":lintchecks"))
   ktlintRuleset(libs.ktlint.twitter.compose)
   coreLibraryDesugaring(libs.android.tools.desugar)
+
+  // React Native dependencies
+  implementation("com.facebook.react:react-android")
+  implementation("com.facebook.react:hermes-android")
 
   implementation(project(":libsignal-service"))
   implementation(project(":paging"))

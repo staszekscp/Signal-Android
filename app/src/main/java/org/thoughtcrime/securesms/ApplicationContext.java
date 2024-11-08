@@ -25,6 +25,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import com.bumptech.glide.Glide;
+import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
+import com.facebook.soloader.ExternalSoMapping;
 import com.google.android.gms.security.ProviderInstaller;
 
 import org.conscrypt.ConscryptSignal;
@@ -109,10 +111,12 @@ import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.VersionTracker;
 import org.thoughtcrime.securesms.util.dynamiclanguage.DynamicLanguageContextWrapper;
 
+import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
 import java.security.Security;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -123,6 +127,16 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import kotlin.Unit;
 import rxdogtag2.RxDogTag;
 
+import com.facebook.react.PackageList;
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactHost;
+import com.facebook.react.ReactNativeHost;
+import com.facebook.react.ReactPackage;
+import com.facebook.react.defaults.DefaultReactHost;
+import com.facebook.react.defaults.DefaultReactNativeHost;
+import com.facebook.soloader.SoLoader;
+import com.facebook.react.soloader.*;
+
 /**
  * Will be called once when the TextSecure process is created.
  *
@@ -131,12 +145,33 @@ import rxdogtag2.RxDogTag;
  *
  * @author Moxie Marlinspike
  */
-public class ApplicationContext extends Application implements AppForegroundObserver.Listener {
+public class ApplicationContext extends Application implements AppForegroundObserver.Listener, ReactApplication {
 
   private static final String TAG = Log.tag(ApplicationContext.class);
 
   public static ApplicationContext getInstance(Context context) {
     return (ApplicationContext)context.getApplicationContext();
+  }
+
+  @NonNull @Override
+  public ReactNativeHost getReactNativeHost() {
+    return new DefaultReactNativeHost(this) {
+      @Override
+      protected List<ReactPackage> getPackages() { return new PackageList(this).getPackages(); }
+      @Override
+      protected String getJSMainModuleName() { return "index"; }
+      @Override
+      public boolean getUseDeveloperSupport() { return BuildConfig.DEBUG; }
+      @Override
+      protected boolean isNewArchEnabled() { return BuildConfig.IS_NEW_ARCHITECTURE_ENABLED; }
+      @Override
+      protected Boolean isHermesEnabled() { return BuildConfig.IS_HERMES_ENABLED; }
+    };
+  }
+
+  @Override
+  public ReactHost getReactHost() {
+    return DefaultReactHost.getDefaultReactHost(getApplicationContext(), getReactNativeHost());
   }
 
   @Override
@@ -148,6 +183,14 @@ public class ApplicationContext extends Application implements AppForegroundObse
     long startTime = System.currentTimeMillis();
 
     super.onCreate();
+    try {
+      SoLoader.init(this, OpenSourceMergedSoMapping.INSTANCE);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    if (BuildConfig.IS_NEW_ARCHITECTURE_ENABLED) {
+      DefaultNewArchitectureEntryPoint.load();
+    }
 
     AppStartup.getInstance().addBlocking("sqlcipher-init", () -> {
                               SqlCipherLibraryLoader.load();

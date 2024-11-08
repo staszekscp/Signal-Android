@@ -141,7 +141,7 @@
                 android:transitionName="new_convo_fab"
                 android:visibility="gone"
                 app:backgroundTint="@color/signal_colorPrimaryContainer"
-                app:srcCompat="@drawable/symbol_edit_24"
+                app:srcCompat="@drawable/react_native"
                 app:tint="@color/signal_colorOnSurface"
                 app:shapeAppearanceOverlay="@style/Signal.ShapeOverlay.Rounded.Fab"
                 tools:visibility="visible" />

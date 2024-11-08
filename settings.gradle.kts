@@ -5,28 +5,18 @@ pluginManagement {
     gradlePluginPortal()
   }
   includeBuild("build-logic")
+  includeBuild("../node_modules/@react-native/gradle-plugin")
 }
 dependencyResolutionManagement {
-  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories {
-    google()
-    mavenCentral()
-    mavenLocal()
-    maven {
-      url = uri("https://raw.githubusercontent.com/signalapp/maven/master/sqlcipher/release/")
-      content {
-        includeGroupByRegex("org\\.signal.*")
-      }
-    }
     maven {
       url = uri("https://dl.cloudsmith.io/qxAgwaeEE1vN8aLU/mobilecoin/mobilecoin/maven/")
     }
-    jcenter {
-      content {
-        includeVersion("mobi.upod", "time-duration-picker", "1.1.3")
-      }
-    }
   }
+}
+
+plugins {
+  id("com.facebook.react.settings")
 }
 
 // To build libsignal from source, set the libsignalClientPath property in gradle.properties.
@@ -40,6 +30,8 @@ if (libsignalClientPath is String) {
     }
   }
 }
+extensions.configure<com.facebook.react.ReactSettingsExtension> { autolinkLibrariesFromCommand() }
+includeBuild("../node_modules/@react-native/gradle-plugin")
 
 include(":app")
 include(":libsignal-service")

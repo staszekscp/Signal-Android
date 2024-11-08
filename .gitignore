@@ -10,6 +10,7 @@ bin/
 gen/
 .idea/
 *.iml
+*.cxx
 out
 tests
 local.properties

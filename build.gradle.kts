@@ -9,6 +9,18 @@ buildscript {
         includeGroupByRegex("org\\.jlleitschuh\\.gradle.*")
       }
     }
+    mavenLocal()
+    maven {
+      url = uri("https://raw.githubusercontent.com/signalapp/maven/master/sqlcipher/release/")
+    }
+    maven {
+      url = uri("https://dl.cloudsmith.io/qxAgwaeEE1vN8aLU/mobilecoin/mobilecoin/maven/")
+    }
+    jcenter {
+      content {
+        includeVersion("mobi.upod", "time-duration-picker", "1.1.3")
+      }
+    }
   }
 
   dependencies {
@@ -28,6 +40,7 @@ buildscript {
     classpath("androidx.benchmark:benchmark-gradle-plugin:1.1.0-beta04")
     classpath(files("$rootDir/wire-handler/wire-handler-1.0.0.jar"))
     classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.9.20-1.0.14")
+    classpath("com.facebook.react:react-native-gradle-plugin")
   }
 }
 
@@ -40,6 +53,28 @@ apply(from = "${rootDir}/constants.gradle.kts")
 subprojects {
   if (JavaVersion.current().isJava8Compatible) {
     allprojects {
+      repositories {
+        google()
+    mavenCentral()
+    maven {
+      url = uri("https://plugins.gradle.org/m2/")
+      content {
+        includeGroupByRegex("org\\.jlleitschuh\\.gradle.*")
+      }
+    }
+    mavenLocal()
+    maven {
+      url = uri("https://raw.githubusercontent.com/signalapp/maven/master/sqlcipher/release/")
+    }
+    maven {
+      url = uri("https://dl.cloudsmith.io/qxAgwaeEE1vN8aLU/mobilecoin/mobilecoin/maven/")
+    }
+    jcenter {
+      content {
+        includeVersion("mobi.upod", "time-duration-picker", "1.1.3")
+      }
+    }
+      }
       tasks.withType<Javadoc> {
         (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet")
       }

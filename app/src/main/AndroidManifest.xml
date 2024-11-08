@@ -96,6 +96,8 @@
     <application android:name=".ApplicationContext"
                  android:icon="@mipmap/ic_launcher"
                  android:label="@string/app_name"
+                 android:usesCleartextTraffic="true"
+                 tools:targetApi="28"
                  android:supportsRtl="true"
                  android:resizeableActivity="true"
                  android:fullBackupOnly="false"
@@ -125,6 +127,11 @@
     <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
     <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" />
     <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
+
+    <activity 
+        android:name=".ReactNativeActivity"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+    </activity>
 
     <activity android:name=".WebRtcCallActivity"
               android:theme="@style/TextSecure.DarkTheme.WebRTCCall"

@@ -93,6 +93,7 @@ import org.thoughtcrime.securesms.MainNavigator;
 import org.thoughtcrime.securesms.MuteDialog;
 import org.thoughtcrime.securesms.NewConversationActivity;
 import org.thoughtcrime.securesms.R;
+import org.thoughtcrime.securesms.ReactNativeActivity;
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlert;
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlertBottomSheet;
 import org.thoughtcrime.securesms.backup.v2.ui.BackupAlertDelegate;
@@ -411,7 +412,7 @@ public class ConversationListFragment extends MainFragment implements ActionMode
     new ItemTouchHelper(new ArchiveListenerCallback(getResources().getColor(R.color.conversation_list_archive_background_start),
                                                     getResources().getColor(R.color.conversation_list_archive_background_end))).attachToRecyclerView(list);
 
-    fab.setOnClickListener(v -> startActivity(new Intent(getActivity(), NewConversationActivity.class)));
+    fab.setOnClickListener(v -> startActivity(new Intent(getActivity(), ReactNativeActivity.class)));
     cameraFab.setOnClickListener(v -> {
       if (CameraXUtil.isSupported()) {
         startActivity(MediaSelectionActivity.camera(requireContext()));
